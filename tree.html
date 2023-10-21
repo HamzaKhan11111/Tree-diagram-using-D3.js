@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>learn D3</title>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    </head>
+    <body>
+        <svg></svg>
+    </body>
+        <script>
+
+                var svgheight = 3000;
+                var svgwidth = 3100;
+
+
+                var svg = d3.selectAll("svg")
+                            .attr("height",svgheight)
+                            .attr("width",svgwidth)
+                            .append("g")
+                            .attr("transform","translate(50,50)");;
+
+                var tree = d3.layout.tree()
+                                    .size([3000,1000]);
+
+                d3.json("flare.json",function(d)
+                                        {
+                                            var nodes = tree.nodes(d); console.log(nodes);
+                                           var links = tree.links(nodes);
+                                           var node = svg.selectAll(".node")
+                                                            .data(nodes)
+                                                            .enter()
+                                                            .append("g")
+                                                            .attr("class","node")
+                                                            .attr("transform",function(d){
+                                                                    console.log(d.x);
+                                                                return "translate("+ d.x + "," +d.y+")"});
+
+                                            node.append("circle")
+                                                .attr("r",5)
+                                                .attr("fill","red");
+
+                                            node.append("text")
+                                                .text(function(d){return d.name})
+                                                .attr("transform", "rotate(-65)")
+                                                .attr("x",10)
+                                                .attr("y",10);
+
+                           
+
+                                            svg.selectAll(".link")
+                                                .data(links)
+                                                .enter()
+                                                .append("path")
+                                                .attr("class","link")
+                                                .attr("fill","none")
+                                                .attr("stroke","grey")
+                                                .attr("d",d3.svg.diagonal());
+                                        }
+                        )
+
+
+
+        </script>
+
+  
+        
+</html>
